@@ -29,17 +29,18 @@ github:
   username: davidtkeane # change to your GitHub username
 
 twitter:
-  username: twitter_username # change to your Twitter username
+  username: DavidTKeane2019 # change to your Twitter username
 
 social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
   name: Ranger
-  email: example@domain.com # change to your email address
+  email: david@icanhelp.ie # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://twitter.com/username # change to your Twitter homepage
-    - https://github.com/username # change to your GitHub homepage
+    - https://x.com/DavidTKeane2019 # change to your Twitter homepage
+    - https://github.com/davidtkeane # change to your GitHub homepage
+    - https://bsky.app/profile/davidtkeane.com # Bluesky profile
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
     # - https://www.linkedin.com/in/username
