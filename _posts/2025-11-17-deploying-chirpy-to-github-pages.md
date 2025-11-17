@@ -466,6 +466,163 @@ ln -s ../../scripts/pre-commit.sh .git/hooks/pre-commit
 
 GitHub Pages is perfect for personal blogs and HTB writeups.
 
+## SUCCESS! It's Live! 🎉
+
+After following all these steps, my blog is now live at:
+
+**https://davidtkeane.github.io/**
+
+The GitHub Actions workflow built the site automatically, and within 2-3 minutes everything was online. All 20+ posts, images, and configuration - all working perfectly!
+
+---
+
+## Daily Workflow: Editing & Publishing
+
+Now that your blog is deployed, here's how to manage it day-to-day.
+
+### Editing an Existing Post
+
+```bash
+# 1. Navigate to your blog directory
+cd /home/kali/Documents/web/ranger-chirpy
+
+# 2. Edit the post
+vim _posts/2025-11-17-your-post.md
+# Or use any editor: nano, code, etc.
+
+# 3. Test locally (optional but recommended)
+bundle exec jekyll serve
+# Visit http://127.0.0.1:4000/ to preview
+
+# 4. Stage the changes
+git add _posts/2025-11-17-your-post.md
+
+# 5. Commit with descriptive message
+git commit -m "Update: fix typo in deployment post"
+
+# 6. Push to GitHub
+git push
+
+# 7. Wait 2-3 minutes for GitHub Actions to rebuild
+# Check: https://github.com/yourusername/yourusername.github.io/actions
+```
+
+### Creating a New Blog Post
+
+```bash
+# 1. Navigate to blog directory
+cd /home/kali/Documents/web/ranger-chirpy
+
+# 2. Create new post with correct naming
+# Format: YYYY-MM-DD-title-with-dashes.md
+touch _posts/2025-11-18-my-new-awesome-post.md
+
+# 3. Edit the post
+vim _posts/2025-11-18-my-new-awesome-post.md
+```
+
+**Add front matter:**
+```yaml
+---
+title: "My New Awesome Post"
+date: 2025-11-18 01:00:00 +0000  # Use 01:00:00 - safe default!
+categories: [GitHub, Guides]
+tags: [tutorial, beginner, example]
+pin: false
+math: false
+mermaid: false
+---
+
+## Introduction
+
+Your content here...
+```
+
+**Then publish:**
+```bash
+# 4. Test locally
+bundle exec jekyll serve
+# Check http://127.0.0.1:4000/
+
+# 5. Stage new post
+git add _posts/2025-11-18-my-new-awesome-post.md
+
+# 6. Commit
+git commit -m "Add new post: My New Awesome Post"
+
+# 7. Push to live site
+git push
+
+# 8. Verify deployment
+# Check GitHub Actions tab for build status
+# Your post appears at: https://yourusername.github.io/posts/my-new-awesome-post/
+```
+
+### Adding Images to Posts
+
+```bash
+# 1. Copy image to assets folder
+cp ~/Downloads/screenshot.png assets/img/screenshot.png
+
+# 2. Reference in your post
+![Description](/assets/img/screenshot.png)
+
+# 3. Stage both post and image
+git add _posts/2025-11-18-post-with-image.md
+git add assets/img/screenshot.png
+
+# 4. Commit and push
+git commit -m "Add post with screenshot"
+git push
+```
+
+### Multiple Changes at Once
+
+```bash
+# Stage everything
+git add .
+
+# Or stage specific files
+git add _posts/2025-11-18-post1.md _posts/2025-11-18-post2.md
+
+# Commit all together
+git commit -m "Add two new posts about security tools"
+
+# Single push updates everything
+git push
+```
+
+---
+
+## Quick Reference Card
+
+```bash
+# === DAILY COMMANDS ===
+
+# Start local server
+cd ~/Documents/web/ranger-chirpy
+bundle exec jekyll serve
+
+# Create new post
+touch _posts/$(date +%Y-%m-%d)-post-title.md
+
+# Edit post
+vim _posts/YYYY-MM-DD-title.md
+
+# Deploy changes
+git add .
+git commit -m "Your message here"
+git push
+
+# Check build status
+# https://github.com/username/username.github.io/actions
+
+# View live site
+# https://username.github.io/
+```
+
+---
+
 ## What's Next
 
 In **Part 3**, I'll cover:
@@ -474,24 +631,6 @@ In **Part 3**, I'll cover:
 - SSL certificate verification
 - SEO optimization
 - Analytics setup (privacy-respecting options)
-
-## Quick Reference
-
-```bash
-# Local development
-bundle exec jekyll serve
-
-# Add new post
-vim _posts/2025-11-17-new-post.md
-
-# Deploy to production
-git add .
-git commit -m "Add: new post title"
-git push
-
-# Check deployment
-# → GitHub repo → Actions tab
-```
 
 ## Resources
 
@@ -502,8 +641,7 @@ git push
 
 ---
 
-*Series: Setting Up Chirpy Jekyll Blog*
-*Part 2 of 3*
+*Deployed from Kali Linux VM on MacBook Pro M3*
 
-*Next: Custom domain setup and SSL configuration*
+*Blog live at: https://davidtkeane.github.io/*
 
