@@ -1,0 +1,157 @@
+<!-- Post Actions: Print, Save, Copy Link -->
+<div class="post-actions">
+  <button onclick="window.print()" class="btn-action" title="Print or Save as PDF">
+    <i class="fas fa-print"></i> Print / PDF
+  </button>
+  <button onclick="copyToClipboard()" class="btn-action" title="Copy link to clipboard">
+    <i class="fas fa-link"></i> Copy Link
+  </button>
+  <button onclick="downloadMarkdown()" class="btn-action" title="Download as Markdown">
+    <i class="fas fa-download"></i> Download .md
+  </button>
+</div>
+
+<style>
+.post-actions {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+  padding: 15px;
+  background: var(--card-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--btn-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.btn-action:hover {
+  background: var(--sidebar-btn-bg);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.btn-action i {
+  font-size: 1rem;
+}
+
+/* Print styles */
+@media print {
+  .post-actions,
+  #sidebar,
+  #topbar,
+  .post-tail-wrapper,
+  #toc-wrapper,
+  footer,
+  .post-navigation {
+    display: none !important;
+  }
+
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000 !important;
+    background: #fff !important;
+  }
+
+  main {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 20px !important;
+  }
+
+  pre, code {
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    border: 1px solid #ccc !important;
+    background: #f5f5f5 !important;
+    color: #000 !important;
+  }
+
+  a {
+    color: #000 !important;
+    text-decoration: underline !important;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    color: #000 !important;
+  }
+
+  .post-content {
+    color: #000 !important;
+  }
+}
+</style>
+
+<script>
+function copyToClipboard() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const btn = event.target.closest('.btn-action');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+    btn.style.background = '#28a745';
+    btn.style.color = '#fff';
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.style.background = '';
+      btn.style.color = '';
+    }, 2000);
+  });
+}
+
+function downloadMarkdown() {
+  // Get post content
+  const title = document.querySelector('.post-title, h1').innerText;
+  const content = document.querySelector('.post-content, article').innerText;
+  const url = window.location.href;
+  const date = new Date().toISOString().split('T')[0];
+
+  // Create markdown content
+  const markdown = `# ${title}\n\nSource: ${url}\nDownloaded: ${date}\n\n---\n\n${content}`;
+
+  // Create download
+  const blob = new Blob([markdown], { type: 'text/markdown' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.md';
+  a.click();
+  URL.revokeObjectURL(a.href);
+
+  // Visual feedback
+  const btn = event.target.closest('.btn-action');
+  const originalText = btn.innerHTML;
+  btn.innerHTML = '<i class="fas fa-check"></i> Downloaded!';
+  btn.style.background = '#28a745';
+  btn.style.color = '#fff';
+  setTimeout(() => {
+    btn.innerHTML = originalText;
+    btn.style.background = '';
+    btn.style.color = '';
+  }, 2000);
+}
+</script>
