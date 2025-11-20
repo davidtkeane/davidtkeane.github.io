@@ -110,5 +110,15 @@ command-3
 
 ---
 
+## Support This Content
+
+If this guide helped you, consider supporting more tutorials like this!
+
+[![Buy me a coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=davidtkeane&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff)](https://buymeacoffee.com/davidtkeane)
+
+Your support helps create more in-depth guides and tutorials!
+
+---
+
 *Optional footer with metadata, time spent, tools used, etc.*
 

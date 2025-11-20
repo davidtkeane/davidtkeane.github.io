@@ -1,5 +1,38 @@
 #!/bin/bash
 # publish.sh - Quick publish to GitHub Pages
+#
+# USAGE:
+#   ./publish.sh
+#
+# WHAT IT DOES:
+#   1. Checks for uncommitted changes (exits if none)
+#   2. Shows preview of what will be published
+#   3. Counts new/modified posts in _posts/
+#   4. Prompts for commit message (or auto-generates from post title)
+#   5. Asks for confirmation (Y/n) with 10 second timeout
+#   6. Stages, commits, and pushes to GitHub
+#
+# AUTO-COMMIT MESSAGES:
+#   - New post detected: "Add post: [Title from front matter]"
+#   - Other changes: "Update blog - YYYY-MM-DD HH:MM"
+#   - Custom message: Type your own when prompted
+#
+# EXAMPLES:
+#   ./publish.sh              # Interactive publish
+#   [Press Enter]             # Use auto-generated message
+#   [Type message]            # Use custom commit message
+#   [Press Y or Enter]        # Confirm and publish
+#   [Press N]                 # Cancel publish
+#
+# REQUIREMENTS:
+#   - Must be run from blog root directory
+#   - Git repository must be initialized
+#   - Remote 'origin' must be configured
+#
+# NOTES:
+#   - GitHub Actions will build the site automatically
+#   - Site goes live in ~2-3 minutes after push
+#   - Check build status: https://github.com/YOUR-USERNAME/YOUR-REPO/actions
 
 set -e  # Exit on error
 
