@@ -12,8 +12,8 @@ mermaid: false
 
 It's January 1st, 2026, and I wanted to share my TryHackMe progress. What started as curiosity has turned into a genuine passion for cybersecurity and ethical hacking.
 
-![My TryHackMe Profile]
 [![TryHackMe](https://tryhackme-badges.s3.amazonaws.com/rangersmyth.png)](https://tryhackme.com/p/rangersmyth)
+
 *My TryHackMe profile - rangersmyth [0x8][HACKER]*
 
 ---
