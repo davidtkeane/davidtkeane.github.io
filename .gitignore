@@ -25,3 +25,33 @@ package-lock.json
 # Misc
 _sass/vendors
 assets/js/dist
+
+# IDE/Editora
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+
+# Drafts (unpublished posts)
+_drafts/
+
+# Local config overrides
+_config.local.yml
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Environment/secrets (if any)
+.env
+.env.local
+
+# Optional: Uncomment to hide publish script
+# publish.sh
+
