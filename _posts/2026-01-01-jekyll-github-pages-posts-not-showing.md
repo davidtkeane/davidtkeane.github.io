@@ -1,6 +1,6 @@
 ---
 title: "Jekyll GitHub Pages: Why Your Posts Aren't Showing (And How to Fix It)"
-date: 2026-01-01 12:00:00 +0000
+date: 2026-01-01 04:00:00 +0000
 categories: [Blogging, Troubleshooting]
 tags: [jekyll, github-pages, chirpy, troubleshooting, github-actions, html-proofer]
 pin: false
