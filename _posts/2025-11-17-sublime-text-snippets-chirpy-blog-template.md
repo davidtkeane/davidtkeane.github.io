@@ -1,6 +1,6 @@
 ---
 title: "Creating Sublime Text Snippets for Blog Post Templates"
-date: 2025-11-16 01:00:00 +0000
+date: 2025-11-17 01:00:00 +0000
 categories: [Blogging, Tools]
 tags: [sublime-text, productivity, automation, chirpy, jekyll, blogging]
 pin: false
@@ -319,8 +319,10 @@ Tab 8 → Footer                           (type: Time: 30 minutes)
 Tab 9 → End of document                  (ready to write!)
 ```
 
-**Video demo:**
-![Snippet in action](/assets/img/snippet-demo.gif)
+**Demo workflow:**
+```
+Type: chirpy → Press: Tab → Full template appears instantly!
+```
 *Type 'chirpy' → Tab → instant template*
 
 ## Troubleshooting
