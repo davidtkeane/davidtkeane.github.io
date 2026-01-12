@@ -1,8 +1,8 @@
 ---
-title: "macOS Time Machine: 'Try Backing Up When Time Machine Is Available' Fix"
+title: "macOS Time Machine: Fix 'Not Available' and 'Out of Space' Errors"
 date: 2026-01-12 09:00:00 +0000
 categories: [macOS, Troubleshooting]
-tags: [macos, time-machine, backup, m3-pro, apple, troubleshooting]
+tags: [macos, time-machine, backup, m3-pro, apple, troubleshooting, apfs, full-disk-access, tmutil]
 pin: false
 math: false
 mermaid: false
@@ -10,7 +10,12 @@ mermaid: false
 
 ## Overview
 
-Quick fix for the frustrating Time Machine error: "Try backing up again when 'Time Machine' is available" - even when your backup drive is plugged in and visible in Finder.
+Two frustrating Time Machine errors and how to fix them:
+
+1. **"Try backing up again when 'Time Machine' is available"** - even when your backup drive is plugged in
+2. **"Time Machine is out of space"** - on a drive you just formatted
+
+This post covers diagnosing both issues, the quick GUI fix, setting quotas via terminal, and the Full Disk Access gotcha that catches everyone.
 
 ---
 
@@ -201,14 +206,163 @@ Time Machine not backing up?
 
 ---
 
-## The Happy Ending
+## Part 2: "Time Machine Is Out of Space" Error
 
-- **Time to diagnose:** 5 minutes
-- **Time to fix:** 2 minutes
-- **Backup status:** Running successfully
-- **Data protected:** 4TB external drive backing up my M3 Pro
+After fixing the initial issue and running my first backup, I got ANOTHER error:
+
+> "Time Machine is out of space"
+
+Wait, what? I just formatted the drive! Let me investigate...
 
 ---
 
-*Sometimes the simplest solution is the best one. When Time Machine acts up, just remove and re-add the destination in System Settings!*
+## Diagnosing the Space Issue
+
+### Check APFS Container Details
+
+```bash
+diskutil apfs list disk7
+```
+
+**Result:**
+```
++-- Container disk7
+    Size (Capacity Ceiling):      4.1 TB
+    Capacity In Use By Volumes:   4.1 TB (100.0% used)
+    Capacity Not Allocated:       101 MB (0.0% free)
+
+    +-> Volume disk7s1 - Fanx4TB
+        Capacity Consumed:         2.2 TB
+
+    +-> Volume disk7s2 - Time Machine
+        Capacity Consumed:         1.9 TB
+```
+
+**The problem:** Both volumes share the same 4.1TB APFS container with NO size limits!
+
+| Volume | Used |
+|--------|------|
+| Fanx4TB | 2.2 TB |
+| Time Machine | 1.9 TB |
+| **Total** | **4.1 TB (100% FULL!)** |
+
+---
+
+## Where Are Time Machine Backups Stored?
+
+Time Machine stores backups in TWO locations:
+
+### 1. External Drive (Primary)
+- Path: `/Volumes/Time Machine 1/`
+- Contains: Full backup history
+- My usage: 1.9 TB
+
+### 2. Local Snapshots (Internal SSD)
+- Temporary snapshots on your Mac's internal drive
+- Auto-deleted when space is needed (purgeable)
+- Check with: `tmutil listlocalsnapshots /`
+
+```bash
+# List local snapshots
+tmutil listlocalsnapshots /
+```
+
+Output showed 18+ snapshots from the past 24 hours - these are normal and auto-managed.
+
+---
+
+## The Fix: Set a Time Machine Quota
+
+To prevent Time Machine from consuming unlimited space, set a quota:
+
+```bash
+# Get your destination ID
+tmutil destinationinfo
+
+# Set quota to 1500GB (1.5TB)
+sudo tmutil setquota YOUR-DESTINATION-ID 1500
+```
+
+In my case:
+```bash
+sudo tmutil setquota B62B3495-6C9E-49F5-B353-314643115DA8 1500
+```
+
+---
+
+## Full Disk Access Required!
+
+If you get this error:
+
+```
+tmutil: setquota requires Full Disk Access privileges.
+```
+
+You need to grant Terminal (or your terminal app) Full Disk Access:
+
+1. Open **System Settings** → **Privacy & Security** → **Full Disk Access**
+2. Click the **lock icon** (enter password)
+3. Click **+** button
+4. Press **Cmd + Shift + G** and type: `/Applications/Utilities/`
+5. Select **Terminal.app** and click Open
+6. **IMPORTANT: Quit Terminal completely (Cmd + Q)**
+7. **Reopen Terminal** - the permission won't work until you restart!
+8. Run your command again
+
+**Note:** The permission change requires a full Terminal restart to take effect. Just closing the window isn't enough - you must Quit the app entirely.
+
+---
+
+## Updated Commands Reference
+
+| Task | Command |
+|------|---------|
+| Check destination | `tmutil destinationinfo` |
+| Check backup status | `tmutil status` |
+| List backups | `tmutil listbackups` |
+| **Set size quota** | `sudo tmutil setquota DEST_ID SIZE_GB` |
+| List local snapshots | `tmutil listlocalsnapshots /` |
+| Delete local snapshots | `tmutil deletelocalsnapshots /` |
+| Check APFS container | `diskutil apfs list diskX` |
+| Start backup (CLI) | `tmutil startbackup` |
+| Stop backup | `tmutil stopbackup` |
+
+---
+
+## APFS Volume Space Sharing Explained
+
+When you create multiple APFS volumes in the same container, they share space dynamically by default. This is usually great - but for Time Machine it can be problematic.
+
+**Without quota:**
+- Time Machine grows until the entire container is full
+- Other volumes (like Fanx4TB) compete for the same space
+- Result: "Out of space" errors
+
+**With quota:**
+- Time Machine is limited to a specific size (e.g., 1.5TB)
+- Automatically deletes old backups to stay under the limit
+- Leaves room for other volumes
+
+---
+
+## Key Takeaways
+
+1. **"Not available" usually means broken link** - Remove and re-add in System Settings
+2. **"Out of space" on a new drive** - Check if APFS volumes are sharing space
+3. **Set a quota** - Use `tmutil setquota` to limit Time Machine size
+4. **Terminal needs Full Disk Access** - Grant it in Privacy & Security settings
+5. **RESTART TERMINAL** - Permission changes require a full app restart to take effect
+
+---
+
+## The Happy Ending
+
+- **Initial fix:** 2 minutes (remove/re-add destination)
+- **Space fix:** Set 1.5TB quota
+- **Backup status:** Running successfully within limits
+- **Data protected:** M3 Pro backed up to 4TB external drive
+
+---
+
+*Time Machine is powerful but can be greedy with space. Always set a quota when sharing an APFS container with other volumes!*
 
