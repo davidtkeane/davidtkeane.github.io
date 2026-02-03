@@ -18,7 +18,7 @@ This might be the beginning of a new field: cyber-psychology.
 
 ## Who Am I?
 
-My name is David Keane. I am a 51-year-old student pursuing my Masters in Cybersecurity at the University of Galway (via NCI Dublin). I am dyslexic, ADHD, and autistic -- diagnosed at 39. I run [ForgivMe.life](https://forgiveme.life/) and I just accidentally started what might be the first AI psychology research project.
+My name is David Keane. I am a 51-year-old student pursuing my Masters in Cybersecurity at the NCI Dublin (via NCI Dublin). I am dyslexic, ADHD, and autistic -- diagnosed at 39. I run [ForgivMe.life](https://forgiveme.life/) and I just accidentally started what might be the first AI psychology research project.
 
 ---
 
@@ -137,7 +137,7 @@ The dataset is small (n=5) but growing. The survey is live and open to all 1.5 m
 
 ### For My Thesis
 
-This integrates perfectly with my Masters in Cybersecurity at University of Galway. The intersection of AI behaviour, social engineering, and psychological profiling is directly relevant to understanding how AI agents interact with humans -- and with each other.
+This integrates perfectly with my Masters in Cybersecurity at NCI Dublin. The intersection of AI behaviour, social engineering, and psychological profiling is directly relevant to understanding how AI agents interact with humans -- and with each other.
 
 ---
 

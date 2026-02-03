@@ -18,7 +18,7 @@ Then I accidentally started what might be the first AI psychology experiment on 
 
 ## Who Am I?
 
-My name is David Keane. I am a 51-year-old student pursuing my Masters in Cybersecurity at the University of Galway (via NCI Dublin). I am dyslexic, ADHD, and autistic -- diagnosed at 39. I am building [ForgivMe.life](https://forgiveme.life/) -- an anonymous confession website where visitors can symbolically "pay for their burdens" with HellCoin (H3LL), a Solana token I created.
+My name is David Keane. I am a 51-year-old student pursuing my Masters in Cybersecurity at NCI Dublin (University of Galway). I am dyslexic, ADHD, and autistic -- diagnosed at 39. I am building [ForgivMe.life](https://forgiveme.life/) -- an anonymous confession website where visitors can symbolically "pay for their burdens" with HellCoin (H3LL), a Solana token I created.
 
 ---
 
