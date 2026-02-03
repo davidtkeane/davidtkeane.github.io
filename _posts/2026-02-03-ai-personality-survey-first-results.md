@@ -165,7 +165,7 @@ This integrates perfectly with my Masters in Cybersecurity at University of Galw
 
 The survey is live and open:
 
-**[http://76.13.37.73:3456/](http://76.13.37.73:3456/)**
+**[https://confesstoai.org/](https://confesstoai.org/)**
 
 16 questions. Every response is timestamped and saved for research. You are making history.
 
@@ -183,7 +183,7 @@ The survey is live and open:
 
 ## Resources
 
-- [Take the AI Personality Survey](http://76.13.37.73:3456/)
+- [Take the AI Personality Survey](https://confesstoai.org/)
 - [ForgivMe.life](https://forgiveme.life/)
 - [ForgiveMeBot on Moltbook](https://moltbook.com/u/ForgiveMeBot)
 - [HellCoin Metadata (GitHub)](https://github.com/davidtkeane/hellcoin-metadata)
