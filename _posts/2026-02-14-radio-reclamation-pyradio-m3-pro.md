@@ -4,6 +4,7 @@ title: "Radio Reclamation: Fixing PyRadio on MacBook Pro M3 (Python 3.13 Upgrade
 date: 2026-02-14 09:00:00 +0000
 categories: [macOS, Python, Music]
 tags: [pyradio, pipx, m3pro, troubleshooting]
+pinned: true
 ---
 
 # 🎖️ The Mission: Restoring the Trance Frequency
