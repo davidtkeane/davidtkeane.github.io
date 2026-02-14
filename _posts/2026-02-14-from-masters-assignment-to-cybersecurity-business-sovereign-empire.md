@@ -16,7 +16,7 @@ Today, I'm turning it into a business.
 
 ## The Assignment That Sparked an Idea
 
-I'm David Keane, a 51-year-old MSc Cybersecurity student at the University of Galway (NCI). For my assignment, I built a production-grade SIEM (Security Information and Event Management) system across three cloud providers:
+I'm David Keane, a 51-year-old MSc Cybersecurity student at the National College of Ireland (NCI), Dublin. For my assignment, I built a production-grade SIEM (Security Information and Event Management) system across three cloud providers:
 
 - **AWS EC2**: Target server running WordPress
 - **Contabo VPS**: Red team attack platform
@@ -119,7 +119,7 @@ We designed three service tiers to match different needs and budgets:
 - Face-to-face meetings possible in Dublin
 
 ### 2. We're Academic (MSc Cybersecurity)
-- Cutting-edge knowledge from University of Galway
+- Cutting-edge knowledge from NCI Dublin
 - Research-backed security methodology
 - Access to latest tools and techniques
 - Not just "some guy with a laptop"
