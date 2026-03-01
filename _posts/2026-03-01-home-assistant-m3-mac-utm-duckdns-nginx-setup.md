@@ -299,9 +299,11 @@ Or just open it in your browser. You should see the Home Assistant login page.
 | Site can't be reached externally | Port forwarding not set up | Add rule: WAN 8123 → HA IP:443 |
 | `ping https://...` fails | Ping doesn't support https:// prefix | Use `ping domain.duckdns.org` (no https://) |
 | Tailscale IP not reachable | Tailscale not running on Mac | Run `tailscale up` on your Mac first |
-| `ERR_SSL_UNRECOGNIZED_NAME_ALERT` | Used https:// for Tailscale URL | Use `http://` not `https://` for Tailscale |
+| `ERR_SSL_UNRECOGNIZED_NAME_ALERT` | Cert not generated yet / serve not enabled | Enable serve in add-on config + HTTPS in Tailscale admin |
+| `FATAL: Tailscale's HTTPS support is disabled` | HTTPS certificates not enabled in Tailscale admin | Go to login.tailscale.com/admin/dns → Enable HTTPS |
 | Tailscale hostname not resolving | MagicDNS not enabled / --accept-dns missing | Enable MagicDNS in admin console + `tailscale up --accept-dns` |
 | `Some peers advertising routes but --accept-routes is false` | Missing flag on tailscale up | Run `tailscale up --accept-routes --accept-dns` |
+| Can't find proxy toggle in add-on config | Renamed in newer versions | Look for "Share Home Assistant with Serve or Funnel" → set to `serve` |
 
 ---
 
@@ -354,27 +356,73 @@ tailscale up --accept-routes --accept-dns
 > If you skip `--accept-routes`, you won't be able to reach subnets advertised by other Tailscale nodes.
 > If you skip `--accept-dns`, MagicDNS hostnames won't resolve.
 
-### Step 3 — Enable MagicDNS
+### Step 3 — Enable MagicDNS and HTTPS Certificates
 
 1. Go to [https://login.tailscale.com/admin/dns](https://login.tailscale.com/admin/dns)
 2. Enable **MagicDNS** → Save
+3. Scroll down → find **HTTPS Certificates** → click **Enable HTTPS** → Save
 
-### Step 4 — Access HA via Tailscale
+> ⚠️ If you skip enabling HTTPS certificates you'll get `FATAL: Tailscale's HTTPS support is disabled` in the add-on logs
 
-You now have two Tailscale access methods:
+### Step 4 — Add Trusted Proxies to configuration.yaml
+
+Open `configuration.yaml` in File Editor and add:
+
+```yaml
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 172.30.33.0/24
+    - 127.0.0.1
+    - 192.168.1.0/24
+  ip_ban_enabled: true
+  login_attempts_threshold: 5
+```
+
+Save → Settings → System → **Restart Home Assistant**
+
+### Step 5 — Enable Tailscale Serve in Add-on
+
+1. Settings → Add-ons → Tailscale → **Configuration tab**
+2. Find **"Share Home Assistant with Serve or Funnel"**
+3. Change from `disabled` → **`serve`**
+
+> Note: Older video guides call this "proxy" — newer versions of the add-on renamed it to "serve"
+
+4. Leave **Share on port** as **443**
+5. Click **Save** → **Restart** the add-on
+
+### Step 6 — Watch the Logs
+
+Settings → Add-ons → Tailscale → **Log tab**
+
+You should see:
 
 ```
-http://100.x.x.x:8123          ← Tailscale IP (always works)
-http://homeassistant.xxx.ts.net:8123  ← MagicDNS hostname (needs MagicDNS enabled)
+cert("homeassistant.xxx.ts.net"): registered ACME account.
+cert("homeassistant.xxx.ts.net"): requesting cert...
+cert("homeassistant.xxx.ts.net"): got cert       ← success!
+
+Available within your tailnet:
+https://homeassistant.xxx.ts.net/
+|-- proxy http://127.0.0.1:8123
 ```
 
-> ⚠️ Always use `http://` not `https://` for Tailscale access — using https:// causes `ERR_SSL_UNRECOGNIZED_NAME_ALERT`
+### Step 7 — Access HA with Full HTTPS — No Port!
+
+```
+https://homeassistant.tailXXXXXX.ts.net
+```
+
+You get a proper padlock, a valid TLS certificate, and no port number needed. This works from any device connected to your Tailscale network.
 
 ### Verify Tailscale is working
 
 ```bash
 tailscale status
 # Should show homeassistant listed with its Tailscale IP
+ping homeassistant.tailXXXXXX.ts.net
+# Should resolve to 100.x.x.x
 ```
 
 ---
@@ -384,8 +432,9 @@ tailscale status
 | Method | URL format | Requires | Best for |
 |--------|-----------|---------|---------|
 | DuckDNS + NGINX | `https://name.duckdns.org:8123` | Open router port | Anyone, any device |
-| Tailscale IP | `http://100.x.x.x:8123` | Tailscale on device | Trusted devices |
-| Tailscale hostname | `http://homeassistant.xxx.ts.net:8123` | Tailscale + MagicDNS | Easiest to remember |
+| Tailscale IP | `http://100.x.x.x:8123` | Tailscale on device | Quick access |
+| Tailscale hostname | `http://homeassistant.xxx.ts.net:8123` | Tailscale + MagicDNS | Easy to remember |
+| **Tailscale HTTPS (Serve)** | `https://homeassistant.xxx.ts.net` | Tailscale Serve + HTTPS cert | **Best — padlock, no port** |
 
 ---
 
@@ -426,4 +475,4 @@ If this guide saved you time, consider buying me a coffee!
 
 ---
 
-*Written 2026-03-01 — based on a real setup session on an M3 Pro Mac using UTM 4.3.5 and Tailscale 1.94.1*
+*Written 2026-03-01 — based on a real setup session on an M3 Pro Mac using UTM 4.3.5 and Tailscale 1.94.1. All steps verified working including full HTTPS via Tailscale Serve.*
