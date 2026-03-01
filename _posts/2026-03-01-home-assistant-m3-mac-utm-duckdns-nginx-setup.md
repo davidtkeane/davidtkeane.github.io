@@ -1,25 +1,27 @@
 ---
 layout: post
-title: "Home Assistant on M3 Mac with UTM, DuckDNS & NGINX — Complete Setup Guide"
+title: "Home Assistant on M3 Mac with UTM, DuckDNS, NGINX & Tailscale — Complete Setup Guide"
 date: 2026-03-01 01:00:00 +0000
 categories: [Homelab, Cloud, Networking]
-tags: [homeassistant, utm, duckdns, nginx, m3mac, apple-silicon, homelab, cloud, tutorial]
+tags: [homeassistant, utm, duckdns, nginx, tailscale, m3mac, apple-silicon, homelab, cloud, tutorial]
 author: David Keane
-description: "Step-by-step guide to running Home Assistant OS on an M3 Mac using UTM, with secure remote HTTPS access via DuckDNS and NGINX — completely free, no Nabu Casa required."
+description: "Step-by-step guide to running Home Assistant OS on an M3 Mac using UTM, with secure remote HTTPS access via DuckDNS, NGINX, and Tailscale — completely free, no Nabu Casa required."
 ---
 
-# Home Assistant on M3 Mac — Free Remote Access with DuckDNS & NGINX
+# Home Assistant on M3 Mac — Free Remote Access with DuckDNS, NGINX & Tailscale
 
 Running Home Assistant on an Apple Silicon Mac is easier than you think — but there are some real gotchas that will trip you up. This guide is based on my actual experience setting it up on an M3 Pro Mac, including every problem I hit and exactly how I fixed it.
 
 **What you'll have at the end:**
 - ✅ Home Assistant OS running locally in a VM on your M3 Mac
-- ✅ Secure HTTPS remote access from anywhere via your own free domain
+- ✅ Secure HTTPS remote access via DuckDNS + NGINX (no port auth needed)
+- ✅ Zero-trust remote access via Tailscale (no open ports needed)
 - ✅ DuckDNS keeping your domain pointing at your home IP automatically
 - ✅ NGINX handling SSL/TLS encryption
+- ✅ Tailscale MagicDNS hostname for easy internal access
 - ✅ No Nabu Casa subscription needed
 
-**Time required:** ~1-2 hours
+**Time required:** ~2 hours
 **Cost:** Free
 **Skill level:** Intermediate
 
@@ -31,6 +33,7 @@ Running Home Assistant on an Apple Silicon Mac is easier than you think — but 
 - UTM virtualisation app (free)
 - Home Assistant OS AArch64 image
 - A free DuckDNS account
+- A free Tailscale account
 - Access to your router's port forwarding settings
 
 ---
@@ -295,12 +298,17 @@ Or just open it in your browser. You should see the Home Assistant login page.
 | `deploy_challenge non-zero exit code` | Let's Encrypt DNS challenge failing | Disable LE in DuckDNS, let NGINX handle SSL |
 | Site can't be reached externally | Port forwarding not set up | Add rule: WAN 8123 → HA IP:443 |
 | `ping https://...` fails | Ping doesn't support https:// prefix | Use `ping domain.duckdns.org` (no https://) |
+| Tailscale IP not reachable | Tailscale not running on Mac | Run `tailscale up` on your Mac first |
+| `ERR_SSL_UNRECOGNIZED_NAME_ALERT` | Used https:// for Tailscale URL | Use `http://` not `https://` for Tailscale |
+| Tailscale hostname not resolving | MagicDNS not enabled / --accept-dns missing | Enable MagicDNS in admin console + `tailscale up --accept-dns` |
+| `Some peers advertising routes but --accept-routes is false` | Missing flag on tailscale up | Run `tailscale up --accept-routes --accept-dns` |
 
 ---
 
 ## Architecture Overview
 
 ```
+── Public Internet Access (DuckDNS + NGINX) ──
 Internet
    │
    ▼
@@ -310,26 +318,90 @@ Router (Port Forward: WAN 8123 → LAN 443)
 NGINX Add-on (port 443) — SSL/TLS termination
    │
    ▼
-Home Assistant OS (UTM VM on M3 Mac — 192.168.1.x)
+Home Assistant OS (UTM VM on M3 Mac)
    │
    ▼
 Your smart devices
+
+── Private Access (Tailscale) ──
+Your phone/laptop (Tailscale)
+   │  WireGuard encrypted tunnel
+   ▼
+Home Assistant OS (Tailscale IP: 100.x.x.x)
+   No open router ports required
 ```
 
 ---
 
-## Nabu Casa vs DuckDNS + NGINX
+## Part 5 (Bonus) — Tailscale (Zero-Trust Remote Access)
 
-| | Nabu Casa | DuckDNS + NGINX |
-|--|-----------|-----------------|
-| Remote access | Yes | Yes |
-| Port forwarding needed | No | Yes |
-| SSL/HTTPS | Automatic | Manual (one-time) |
-| Cloud backup | Yes | No |
-| Cost | ~€6/month | Free |
-| Complexity | Very easy | Medium |
+Tailscale is a WireGuard-based VPN that connects all your devices into a private network. No open ports required — more secure than DuckDNS + NGINX for private access.
 
-Nabu Casa is genuinely the easier option and supports the Home Assistant project financially. But if you want full control and zero cost, DuckDNS + NGINX works perfectly.
+### Step 1 — Install Tailscale Add-on
+
+1. Settings → Add-ons → Add-on Store → search **Tailscale**
+2. Install → Start
+3. Follow the login link shown in logs to connect HA to your Tailscale account
+
+### Step 2 — Connect Your Mac to Tailscale
+
+Make sure Tailscale is running on your Mac:
+
+```bash
+tailscale up --accept-routes --accept-dns
+```
+
+> If you skip `--accept-routes`, you won't be able to reach subnets advertised by other Tailscale nodes.
+> If you skip `--accept-dns`, MagicDNS hostnames won't resolve.
+
+### Step 3 — Enable MagicDNS
+
+1. Go to [https://login.tailscale.com/admin/dns](https://login.tailscale.com/admin/dns)
+2. Enable **MagicDNS** → Save
+
+### Step 4 — Access HA via Tailscale
+
+You now have two Tailscale access methods:
+
+```
+http://100.x.x.x:8123          ← Tailscale IP (always works)
+http://homeassistant.xxx.ts.net:8123  ← MagicDNS hostname (needs MagicDNS enabled)
+```
+
+> ⚠️ Always use `http://` not `https://` for Tailscale access — using https:// causes `ERR_SSL_UNRECOGNIZED_NAME_ALERT`
+
+### Verify Tailscale is working
+
+```bash
+tailscale status
+# Should show homeassistant listed with its Tailscale IP
+```
+
+---
+
+## Three Ways to Access Home Assistant Remotely
+
+| Method | URL format | Requires | Best for |
+|--------|-----------|---------|---------|
+| DuckDNS + NGINX | `https://name.duckdns.org:8123` | Open router port | Anyone, any device |
+| Tailscale IP | `http://100.x.x.x:8123` | Tailscale on device | Trusted devices |
+| Tailscale hostname | `http://homeassistant.xxx.ts.net:8123` | Tailscale + MagicDNS | Easiest to remember |
+
+---
+
+## Nabu Casa vs DuckDNS + NGINX + Tailscale
+
+| | Nabu Casa | DuckDNS + NGINX | Tailscale |
+|--|-----------|-----------------|-----------|
+| Remote access | Yes | Yes | Yes |
+| Port forwarding needed | No | Yes | No |
+| SSL/HTTPS | Automatic | Manual setup | WireGuard (built-in) |
+| Cloud backup | Yes | No | No |
+| Cost | ~€6/month | Free | Free (personal) |
+| Complexity | Very easy | Medium | Easy |
+| Open ports on router | No | Yes | No |
+
+Nabu Casa is the easiest option and supports the HA developers. DuckDNS + NGINX gives you public HTTPS access. Tailscale gives you the most secure private access with zero open ports.
 
 ---
 
@@ -341,6 +413,8 @@ Nabu Casa is genuinely the easier option and supports the Home Assistant project
 - [DuckDNS](https://www.duckdns.org)
 - [HA Community — UTM Apple Silicon Guide](https://community.home-assistant.io/t/guide-home-assistant-on-apple-silicon-mac-using-ha-os-aarch64-image/444785)
 - [YouTube: Secure HA Remote Access with DuckDNS + NGINX](https://www.youtube.com/watch?v=jdyZ6lp1Emg)
+- [Tailscale](https://tailscale.com)
+- [Tailscale Admin Console — DNS / MagicDNS](https://login.tailscale.com/admin/dns)
 
 ---
 
@@ -352,4 +426,4 @@ If this guide saved you time, consider buying me a coffee!
 
 ---
 
-*Written 2026-03-01 — based on a real setup session on an M3 Pro Mac using UTM 4.3.5*
+*Written 2026-03-01 — based on a real setup session on an M3 Pro Mac using UTM 4.3.5 and Tailscale 1.94.1*
