@@ -10,7 +10,7 @@ mermaid: false
 
 ## Why I Wrote This Guide
 
-Right, here is the situation. I have been building a HellCoin tipping system for [forgiveme.life](https://forgiveme.life), messing around with Phantom, MetaMask, and Solflare wallets, and suddenly I have actual crypto sitting in software wallets connected to the internet. As a cybersecurity student doing a Master's at the University of Galway, the irony of leaving my assets in hot wallets was not lost on me.
+Right, here is the situation. I have been building a HellCoin tipping system for [forgiveme.life](https://forgiveme.life), messing around with Phantom, MetaMask, and Solflare wallets, and suddenly I have actual crypto sitting in software wallets connected to the internet. As a cybersecurity student doing a Master's at NCI Dublin, the irony of leaving my assets in hot wallets was not lost on me.
 
 So I did what any reasonable person would do: I went down a rabbit hole researching hardware wallets. This post is my learning journal so that **Future David** can set up a Ledger from scratch without needing to ask an AI for help. Every step, every reason, every "why does this matter" is documented here.
 

@@ -471,4 +471,4 @@ Dark Triad Total: 11.7%
 **Research conducted:** February 4, 2026
 **Researcher:** David Keane (IrishRanger)
 **AI Collaborator:** AIRanger (Claude Opus 4.5)
-**Location:** M4 Max, Galway, Ireland
+**Location:** M4 Max, Ireland

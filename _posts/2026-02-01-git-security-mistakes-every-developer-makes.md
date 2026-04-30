@@ -18,7 +18,7 @@ If you have ever typed `git push` without thinking about what was in your files,
 
 ## Who Am I?
 
-My name is David Keane. I am a 51-year-old Applied Psychology graduate from Dublin, Ireland, currently pursuing my Masters in Cybersecurity at the University of Galway (via NCI Dublin). I am dyslexic, ADHD, and autistic -- diagnosed at 39 -- and I have spent 14 years turning those diagnoses into superpowers.
+My name is David Keane. I am a 51-year-old Applied Psychology graduate from Dublin, Ireland, currently pursuing my Masters in Cybersecurity at NCI Dublin. I am dyslexic, ADHD, and autistic -- diagnosed at 39 -- and I have spent 14 years turning those diagnoses into superpowers.
 
 I build things. I break things. I learn from the wreckage. And then I write it all down so you can skip the wreckage part.
 

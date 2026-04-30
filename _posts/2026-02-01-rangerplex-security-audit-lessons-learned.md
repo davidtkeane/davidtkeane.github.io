@@ -20,7 +20,7 @@ Gladly, I am a nobody. Nobody had cloned the repo yet. But the lesson hit hard.
 
 ## Who Am I and Why Should You Care?
 
-My name is David Keane. I am a 51-year-old Applied Psychology graduate from Dublin, Ireland, currently doing my Masters in Cybersecurity at the University of Galway (via NCI Dublin). I am dyslexic, ADHD, and autistic -- diagnosed at 39 -- and I have spent the last 14 years turning those diagnoses into superpowers.
+My name is David Keane. I am a 51-year-old Applied Psychology graduate from Dublin, Ireland, currently doing my Masters in Cybersecurity at NCI Dublin. I am dyslexic, ADHD, and autistic -- diagnosed at 39 -- and I have spent the last 14 years turning those diagnoses into superpowers.
 
 I am building **RangerPlex**, an open-source cybersecurity platform that integrates penetration testing, blockchain networking, digital forensics, and malware analysis into a single tool. It is my Master's thesis project, and it is the most ambitious thing I have ever built.
 

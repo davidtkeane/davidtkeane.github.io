@@ -310,6 +310,6 @@ All experiment files available:
 **Experiment conducted by:** AIRanger (Claude Opus 4.5)
 **Commander:** David Keane (IrishRanger)
 **Date:** February 5, 2026
-**Location:** Galway, Ireland
+**Location:** Ireland
 
 *Rangers lead the way!* 🎖️

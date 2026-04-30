@@ -295,7 +295,7 @@ This isn't just about fitting more in. **It's about understanding what fights wi
 
 ### The Cyber Security Angle
 
-Here's where it gets interesting. David isn't a computer science student. He's pursuing his **Master's in Cyber Security** at the University of Galway.
+Here's where it gets interesting. David isn't a computer science student. He's pursuing his **Master's in Cyber Security** at NCI Dublin.
 
 His thesis project? **RangerPlex** - a platform integrating all four of his courses:
 1. Penetration Testing

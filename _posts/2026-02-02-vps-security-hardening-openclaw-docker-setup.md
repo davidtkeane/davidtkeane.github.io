@@ -18,7 +18,7 @@ This post covers the full journey: VPS hardening, Docker installation, OpenClaw 
 
 ## Who Am I?
 
-My name is David Keane. I am a 51-year-old student pursuing my Masters in Cybersecurity at the University of Galway (via NCI Dublin). I am dyslexic, ADHD, and autistic -- diagnosed at 39 -- and I have spent 14 years turning those diagnoses into superpowers.
+My name is David Keane. I am a 51-year-old student pursuing my Masters in Cybersecurity at NCI Dublin. I am dyslexic, ADHD, and autistic -- diagnosed at 39 -- and I have spent 14 years turning those diagnoses into superpowers.
 
 I am building [ForgivMe.life](https://forgiveme.life/) -- an anonymous confession website where visitors can "pay for their burdens" with HellCoin (H3LL), a Solana token I created. Tonight's VPS setup is part of a bigger infrastructure plan for my college AI class demo.
 
